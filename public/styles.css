@@ -38,6 +38,8 @@ p {
 
 label {
   display: block; }
+  
+  
 
 nav a.current {
   background: #c4c4c4; }
@@ -83,3 +85,25 @@ nav a.current {
 
 .centered {
   text-align: center; }
+  
+ .titulo{
+	text-align:center; 
+	font-family:Impact; 
+	font-size:50px; 
+	color:white;
+}
+.btn1{
+	background-color:#0F527A;
+	text-align: center;
+	font-size: 15px;
+	color:white;	
+	width: 120px;
+	padding-right: 5px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	cursor: pointer;
+	display: inline-block;
+	text-decoration:none; 
+	display: inline-block;
+
+}
