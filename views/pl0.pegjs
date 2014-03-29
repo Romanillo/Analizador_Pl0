@@ -20,69 +20,111 @@
   }
 }
 
-program = b:block DOT { return {type: "PROGRAM",bloque: b };}  
+program = b:block DOT { return {
+                        type: "PROGRAM",
+                        bloque: b };
+                     }  
 
 block = c:(const)? v:(var)? p:(proc)* s:st {
-	var k = new Array()
-	if (c){
-		k.push({type: "CONST", lista: c})
-	}
-	if (v){
-		k.push({type: "VAR", lista: v})
-	}
-	if (p) {
-		k.push(p)
-	}
-	if (s){
-		k.push(s)
-	}
-	return k
+var k = new Array()
+if (c){
+ k.push({type: "CONST", lista: c})
 }
+if (v){
+ k.push({type: "VAR", lista: v})
+}
+if (p) {
+ k.push(p)
+}
+if (s){
+ k.push(s)
+}
+return k}
 
 const = CONST u:assin c:(COMA (assin))* PYC {
-	var r = new Array();
-	r.push(u)
-	for ( var i = 0; i < c.length; i++)
-		r.push(c[i][1]);
-	return r;
+var r = new Array();
+r.push(u)
+for ( var i = 0; i < c.length; i++)
+    r.push(c[i][1]);
+return r;
 } 
 
 var = VAR id: ID i:(COMA ID)* PYC{
-	var r = new Array();
-	r.push(id);
-	for ( var k = 0; k < i.length; k++)
-		r.push(i[k][1]);
-	return r;
+var r = new Array();
+r.push(id);
+for ( var k = 0; k < i.length; k++)
+    r.push(i[k][1]);
+return r;
 }
 
 proc = PROCEDURE id:ID a:(arg)? PYC  b:block PYC{
-	if (a)
-	return { type: "PROCEDURE", name: id, argumentos: a, subrutina: b[1]}
-	else
-	return { type: "PROCEDURE", name: id, subrutina: b[1]}
+if (a)
+return { type: "PROCEDURE", name: id, argumentos: a, subrutina: b[1]}
+else
+return { type: "PROCEDURE", name: id, subrutina: b[1]}
 }
 
 assin = i:ID ASSIGN e:exp {return {type: '=', left: i, right: e}; }
 
 arg = LEFTPAR e:exp  a:(COMA exp)* RIGHTPAR{
-	var r = new Array();
-	r.push(e);
-	for (var i = 0; i < a.length; i++)
-		r.push(a[i][1]);
-	return {lista: r}
+var r = new Array();
+r.push(e);
+for (var i = 0; i < a.length; i++)
+     r.push(a[i][1]);
+return {lista: r}
 }
 
 
 st     = CALL r:ID a:(arg)?
            {return {type:'CALL', argumentos: a, right: r }; } 
-       / i:ID ASSIGN e:exp { return {type: '=', left: i, right: e}; }
-       / IF e:cond THEN st:st ELSE sf:st{return {type: 'IFELSE',c:  e,st: st,sf: sf,};}
-       / IF e:cond THEN st:st    {return {type: 'IF',c:  e,st: st};}
-       / BEGIN stt:st ar:(PYC st)* END{var r = [stt];for ( var k = 0; k < ar.length; k++)r.push(ar[k][1]);return r;}
-       / WHILE c:cond DO s:st{return {type: 'WHILE',condicion: c,stat: s};}
+       / i:ID ASSIGN e:exp            
+            { return {type: '=', left: i, right: e}; }
+       / IF e:cond THEN st:st ELSE sf:st
+           {
+             return {
+               type: 'IFELSE',
+               c:  e,
+               st: st,
+               sf: sf,
+             };
+           }
+       / IF e:cond THEN st:st    
+           {
+             return {
+               type: 'IF',
+               c:  e,
+               st: st
+             };
+           }
+       / BEGIN stt:st ar:(PYC st)* END
+           {
+             var r = [stt];
+             for ( var k = 0; k < ar.length; k++)
+               r.push(ar[k][1]);
+             return r;
+           }
+       / WHILE c:cond DO s:st
+          {
+            return {
+               type: 'WHILE',
+               condicion: c,
+               stat: s
+            };
+          }
 
-cond   = ODD e:exp {return{type: 'ODD',cond: e}}
-       / e:exp t:COMPARISON ee:exp { return {type: t,left: e,right: ee}; }
+cond   = ODD e:exp {
+         return{
+           type: 'ODD',
+           cond: e
+           }
+         }
+       / e:exp t:COMPARISON ee:exp { 
+         return {
+            type: t,
+            left: e,
+            right: ee
+         }; 
+         }
 exp    = t:term   r:(ADD term)*   { return tree(t,r); }
 term   = f:factor r:(MUL factor)* { return tree(f,r); }
 
@@ -104,8 +146,8 @@ ELSE     = _ "else" _
 WHILE    = _ "while" _ 
 DO       = _ "do" _
 DOT      = _"."_
-COMA     = _","_
 PYC     = _";"_
+COMA     = _","_
 LEFTPAR  = _"("_
 RIGHTPAR = _")"_
 VAR      = _"var"_
