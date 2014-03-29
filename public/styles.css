@@ -105,5 +105,11 @@ nav a.current {
 	display: inline-block;
 	text-decoration:none; 
 	display: inline-block;
-
+}
+.barra{
+	width: 90%;
+	margin: auto;
+	text-align: center;
+	margin-top: 15px;
+	margin-bottom: 15px;
 }
