@@ -97,17 +97,15 @@ nav a.current {
 	text-align: center;
 	font-size: 15px;
 	color:white;	
-	width: 120px;
 	padding-right: 5px;
 	padding-top: 5px;
 	padding-bottom: 5px;
 	cursor: pointer;
 	display: inline-block;
 	text-decoration:none; 
-	display: inline-block;
 }
 .barra{
-	width: 90%;
+	width: 80%;
 	margin: auto;
 	text-align: center;
 	margin-top: 15px;
