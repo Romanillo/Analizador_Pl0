@@ -86,7 +86,7 @@ nav a.current {
 .centered {
   text-align: center; }
   
- .titulo{
+.titulo{
 	text-align:center; 
 	font-family:Impact; 
 	font-size:50px; 
@@ -104,10 +104,20 @@ nav a.current {
 	display: inline-block;
 	text-decoration:none; 
 }
+.btn1:hover {
+	background-color: #245191;
+
+}
 .barra{
 	width: 80%;
 	margin: auto;
 	text-align: center;
 	margin-top: 15px;
 	margin-bottom: 15px;
+}
+.cuadro{
+	margin:auto; 
+	width:100%; 
+	background-color:gray; 
+	padding-bottom:20px;
 }
