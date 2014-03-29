@@ -20,7 +20,7 @@ th, td        { vertical-align: top; text-align: left; }
 #finaltable:hover td { background-color: blue; } 
 tr:nth-child(odd)    { background-color:#eee; }
 tr:nth-child(even)    { background-color:#00FF66; }
-input        { text-align: center;  border: none;  width: 100%; overflow: auto;}     /* Align input to the right  */
+input        { text-align: center;  border: none;  width: 600px; overflow: auto; font-family: monospace;}     /* Align input to the right  */
 textarea     { border: outset; border-color: white;       }                        
 table        { border: inset; border-color: white; }
 .hidden      { display: none; }
