@@ -13,21 +13,23 @@
 	  </ul>
 	  </nav>
 	  <table>
-		<tr>
-		  <td>
-			<form action="/save" method="post">
-			  <textarea id="input" name="input" 
-						autofocus cols = "40" rows = "4">
-	<%= source %>
-			  </textarea>
-			  <br/>
-			  <label for="saveas">Guardar fragmento de código como:</label>
-			  <input id="saveas" type="text" name="fname" 
-					 title="name" pattern="\w+" />
-			</form>
-		  </td>
-		  <td><button id="parse" type="button">Analizar</button></td>
-		</tr>
+		<div class="cuadro1">
+			<tr>
+			  <td>
+				<form action="/save" method="post">
+				  <textarea id="input" name="input" 
+							autofocus cols = "40" rows = "4">
+		<%= source %>
+				  </textarea>
+				  <br/>
+				  <label for="saveas">Guardar fragmento de código como:</label>
+				  <input id="saveas" type="text" name="fname" 
+						 title="name" pattern="\w+" />
+				</form>
+			  </td>
+			  <td><button id="parse" type="button">Analizar</button></td>
+			</tr>
+		</div>
 	  </table>
 	  </p>
 	  <div class="output">

@@ -89,7 +89,7 @@ nav a.current {
 .titulo{
 	text-align:center; 
 	font-family:Impact; 
-	font-size:50px; 
+	font-size:40px; 
 	color:white;
 }
 .btn1{
@@ -117,7 +117,11 @@ nav a.current {
 }
 .cuadro{
 	margin:auto; 
-	width:100%; 
+	width:80%; 
 	background-color:gray; 
 	padding-bottom:20px;
+}
+.cuadro1{
+	margin:auto;
+	width: 70%;
 }
