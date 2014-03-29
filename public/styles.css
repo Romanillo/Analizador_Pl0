@@ -134,7 +134,8 @@ nav a.current {
 }
 .cuadro1{
 	margin:auto; 
-	width:70%;
+	width:500px;
+	background-color:white;
 	padding-bottom:10px;
 	padding-top:10px;
 	padding-right:10px;
