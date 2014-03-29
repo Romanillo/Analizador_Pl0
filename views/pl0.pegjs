@@ -20,111 +20,132 @@
   }
 }
 
-program = b:block DOT { return {
-                        type: "PROGRAM",
-                        bloque: b };
-                     }  
+prog   = b:block DOT { return { type: 'program', block: b } }
 
-block = c:(const)? v:(var)? p:(proc)* s:st {
-var k = new Array()
-if (c){
- k.push({type: "CONST", lista: c})
-}
-if (v){
- k.push({type: "VAR", lista: v})
-}
-if (p) {
- k.push(p)
-}
-if (s){
- k.push(s)
-}
-return k}
+block  = VAR v:var p:proc s:st 
+           { 
+             
+             return { 
+               type: 'block',
+               vars: v,
+               procs: p,
+               st: s
+             }        
+           }
+       / CONST c:cons VAR v:var p:proc s:st 
+           {         
+             
+             return { 
+               type: 'block',
+               consts: c,
+               vars: v,
+               procs: p,
+               st: s
+             }        
+           }
+       / CONST c:cons p:proc s:st 
+           { 
+             
+             return { 
+               type: 'block',
+               consts: c,
+               procs: p,
+               st: s
+             }        
+           }
+       / p:proc s:st 
+           { 
+             
+             return { 
+               type: 'block',
+               procs: p,
+               st: s
+             }        
+           }
 
-const = CONST u:assin c:(COMA (assin))* PYC {
-var r = new Array();
-r.push(u)
-for ( var i = 0; i < c.length; i++)
-    r.push(c[i][1]);
-return r;
-} 
+cons   = i:ID ASSIGN n:NUMBER c:(COMA ID ASSIGN NUMBER)* PYC 
+           {     
+             
+             var result = [{type: '=', left: i, right: n}];
+             for (var x = 0; x < c.length; x++)
+               result.push({type: '=', left: c[x][1], right: c[x][3]});
+             
+             return result;
+           }
 
-var = VAR id: ID i:(COMA ID)* PYC{
-var r = new Array();
-r.push(id);
-for ( var k = 0; k < i.length; k++)
-    r.push(i[k][1]);
-return r;
-}
-
-proc = PROCEDURE id:ID a:(arg)? PYC  b:block PYC{
-if (a)
-return { type: "PROCEDURE", name: id, argumentos: a, subrutina: b[1]}
-else
-return { type: "PROCEDURE", name: id, subrutina: b[1]}
-}
-
-assin = i:ID ASSIGN e:exp {return {type: '=', left: i, right: e}; }
-
-arg = LEFTPAR e:exp  a:(COMA exp)* RIGHTPAR{
-var r = new Array();
-r.push(e);
-for (var i = 0; i < a.length; i++)
-     r.push(a[i][1]);
-return {lista: r}
-}
-
-
-st     = CALL r:ID a:(arg)?
-           {return {type:'CALL', argumentos: a, right: r }; } 
-       / i:ID ASSIGN e:exp            
-            { return {type: '=', left: i, right: e}; }
-       / IF e:cond THEN st:st ELSE sf:st
+var    = i:ID v:(COMA ID)* PYC
+           {     
+             
+             var ids = [i];
+             for (var x = 0; x < v.length; x++)
+               ids.push(v[x][1]);
+             
+             return ids;
+           }
+           
+proc   = p:(PROCEDURE ID args? PYC block PYC)*
+           {
+                  
+             var result = [];
+             for (var x = 0; x < p.length; x++)
+               result.push({type: 'procedure', id: p[x][1], arguments: p[x][2], block: p[x][4]});
+             
+             return result;
+           }
+           
+args   = LEFTPAR i:ID is:(COMA ID)* RIGHTPAR
+           {
+     
+             var result = [i];
+             for (var x = 0; x < is.length; x++)
+               result.push(is[x][1]);
+             
+             return result;
+           }
+           
+st     = i:ID ASSIGN e:exp            
+            { return { type: '=', left: i, right: e }; }
+       / CALL i:ID a:args? 
+           { 
+             return { type: 'call', id: i, arguments: a }; 
+           }
+       / BEGIN l:st r:(PYC st)* END
+           { 
+             var result = [l];
+               for (var i = 0; i < r.length; i++)
+                 result.push(r[i][1]);
+         
+               return result;
+           }
+       / IF c:cond THEN st:st ELSE sf:st
            {
              return {
                type: 'IFELSE',
-               c:  e,
-               st: st,
-               sf: sf,
+               condition:  e,
+               true_st: st,
+               false_st: sf,
              };
            }
-       / IF e:cond THEN st:st    
+       / IF c:cond THEN st:st    
            {
              return {
                type: 'IF',
-               c:  e,
+               condition:  c,
                st: st
              };
            }
-       / BEGIN stt:st ar:(PYC st)* END
+       / WHILE c:cond DO st:st    
            {
-             var r = [stt];
-             for ( var k = 0; k < ar.length; k++)
-               r.push(ar[k][1]);
-             return r;
+             return {
+               type: 'IF',
+               condition:  c,
+               st: st
+             };
            }
-       / WHILE c:cond DO s:st
-          {
-            return {
-               type: 'WHILE',
-               condicion: c,
-               stat: s
-            };
-          }
 
-cond   = ODD e:exp {
-         return{
-           type: 'ODD',
-           cond: e
-           }
-         }
-       / e:exp t:COMPARISON ee:exp { 
-         return {
-            type: t,
-            left: e,
-            right: ee
-         }; 
-         }
+cond   = o:ODD e:exp { return { type: o, expression: e }; }
+       / e1:exp c:COND e2:exp { return { type: c, left: e1, right: e2 }; }
+       
 exp    = t:term   r:(ADD term)*   { return tree(t,r); }
 term   = f:factor r:(MUL factor)* { return tree(f,r); }
 
@@ -134,26 +155,26 @@ factor = NUMBER
 
 _ = $[ \t\n\r]*
 
-COMPARISON = _ op:('==' / [#|<|<=|>|>=]) _ { return op; }
 ASSIGN   = _ op:'=' _  { return op; }
 ADD      = _ op:[+-] _ { return op; }
 MUL      = _ op:[*/] _ { return op; }
+COND     = _ op:$([<>=!][=]/[<>]) _ { return op; }
+LEFTPAR  = _"("_
+RIGHTPAR = _")"_
+PYC      = _";"_
+COMA     = _","_
+DOT      = _"."_
+CALL     = _ "call" _
 BEGIN    = _ "begin" _
 END      = _ "end" _
+PROCEDURE = _ "procedure" _
+CONST    = _ "const" _
+VAR      = _ "var" _
 IF       = _ "if" _
 THEN     = _ "then" _
 ELSE     = _ "else" _
-WHILE    = _ "while" _ 
+WHILE    = _ "while" _
 DO       = _ "do" _
-DOT      = _"."_
-PYC     = _";"_
-COMA     = _","_
-LEFTPAR  = _"("_
-RIGHTPAR = _")"_
-VAR      = _"var"_
-CONST    = _"const"_
-PROCEDURE= _"procedure"_
-CALL     = _ "call" _
 ODD      = _ "odd" _
 ID       = _ id:$([a-zA-Z_][a-zA-Z_0-9]*) _ 
             { 
