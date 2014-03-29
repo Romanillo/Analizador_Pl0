@@ -18,21 +18,22 @@
 				<form action="/save" method="post">
 				  <textarea id="input" name="input" 
 							autofocus cols = "40" rows = "4">
-		<%= source %>
+							<%= source %>
 				  </textarea>
 				  <div class="barra1">
-					<a href=" "  title="Ejemplo1" class="btn1">Ejemplo1</a> 
-					<a href=" "  title="Ejemplo2" class="btn1">Ejemplo2</a> 
-					<a href=" "  title="Ejemplo3" class="btn1">Ejemplo3</a> 
+					<div id="ejemplo1" class="btn1" onclick="dump('input1.txt')>Ejemplo1</div> 
+					<div id="ejemplo2" class="btn1" onclick="dump('input2.txt')>Ejemplo2</div> 
+					<div id="ejemplo3" class="btn1" onclick="dump('input3.txt')>Ejemplo3</div> 
 				  </div>
 				  <br/>
 				  <label for="saveas">Guardar fragmento de código como:</label>
 				  <input id="saveas" type="text" name="fname" 
 						 title="name" pattern="\w+" />
 				</form>
-			  </td>
-			  <td><button id="parse" type="button">Analizar</button></td>
-			</tr>
+			 <div class="barra">
+				<input id="parse" value=Parse type=button class="btn1">
+			</div>
+			
 	  </table>
 	  </p>
 	  <div class="output">

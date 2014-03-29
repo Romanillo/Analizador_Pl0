@@ -32,6 +32,22 @@
 	<div class="cuadro">
     <%= yield %>
 	</div>
+	 <!-- Script para el CodeMirror y carga de ficheros -->
+  <script>
+    // Generar un editor CodeMirror a partir del textarea INPUT (se borra y se reemplaza).
+    var editor = CodeMirror.fromTextArea(document.getElementById("INPUT"), {
+      lineNumbers: true,
+      viewportMargin: Infinity
+    });
+
+    // Véase http://stackoverflow.com/questions/8378678/how-can-i-set-the-value-of-a-codemirror-editor-by-javascript
+    function dump(fileName) {
+      $.get(fileName, function (data) {
+        //$("#INPUT").val(data);
+		  editor.setValue(data);
+      });
+    };
+  </script>
   </body>
 </html>
 
